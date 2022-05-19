@@ -1,6 +1,6 @@
 %{
 	int linea;
-
+	int errores;
 	#define TDATO	1
 	#define ID	2
 	#define OP	3
@@ -21,8 +21,9 @@ num	{digito}({digito}*"."{digito}*)?
 ";"			return SIGNP;
 {num}			return NUM;
 \n			linea++;
-.			;
-
+\t			;
+" "			;
+.			errores++;
 %%
 
 int yywrap() {}
@@ -30,9 +31,11 @@ int yywrap() {}
 int main(){
 int token = yylex();
 while(token) {
-	printf("Token de tipo %d reconocido en linea %d: %s\n",token,linea,yytext);
+	printf("Token de tipo %d reconocido en linea %d: %s\n",
+		token,linea,yytext);
 	token=yylex();
 }
+printf("Se han detectado %d errores",errores);
 return 0;
 }
 
